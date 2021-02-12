@@ -18,8 +18,8 @@
     "commands": [
       {
         "command": "x0.paste",
-        "title": "x0Paste",
-        "description": "does this display?"
+        "title": "Paste",
+        "category": "x0"
       }
     ]
   },
