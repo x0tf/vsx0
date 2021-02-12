@@ -1,7 +1,7 @@
 {
-  "name": "x0",
-  "displayName": "x0",
-  "publisher": "x0",
+  "name": "vsx0",
+  "displayName": "vsx0",
+  "publisher": "MeerBiene",
   "description": "Who needs a frontend when you can have a VSCode Extension",
   "version": "0.0.1",
   "engines": {
@@ -11,13 +11,13 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:x0.paste"
+    "onCommand:vsx0.paste"
   ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "x0.paste",
+        "command": "vsx0.paste",
         "title": "Paste",
         "category": "x0"
       }
