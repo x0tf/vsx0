@@ -45,6 +45,7 @@
   "scripts": {
     "publish": "vsce package",
     "release": "standard-version",
+    "commit": "cz",
     "vscode:prepublish": "npm run package",
     "compile": "webpack",
     "watch": "webpack --watch",

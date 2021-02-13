@@ -11,21 +11,12 @@ const register = async (context: ExtensionContext): Promise<void> => {
     placeHolder: '"vsx0"for example'
   });
   if (!namespace) return;
-  const invite = await window.showInputBox({
-    prompt: 'Enter your invite. This is required to register a namespace.'
-  });
-  if (!invite) return;
 
-  console.log(namespace, invite);
   const res: Returnobject = await http.POST(
     apiUrl.register.replace('%%namespace%%', namespace),
     '',
-    {
-      key: 'invite',
-      value: invite
-    }
+    {}
   );
-  console.log(res);
   if (!res.data.error && res.data.token) {
     await StorageProvider.set(context, namespace, res.data.token);
     msg.success(
