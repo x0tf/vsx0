@@ -17,7 +17,7 @@ const createNewPaste = async (
   });
   if (!res.error && res.data) {
     msg.success(
-      `Heres your link: ${apiUrl.baseUrl}/${namespace}/${res.data.key}`
+      `Heres your link: ${apiUrl.baseUrl}${namespace}/${res.data.key}`
     );
   } else {
     msg.warn(`Something went wrong, please try again.`);

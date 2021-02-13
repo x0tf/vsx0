@@ -1,7 +1,7 @@
 {
   "name": "vsx0",
   "displayName": "vsx0",
-  "publisher": "MeerBiene",
+  "publisher": "vsmeer",
   "description": "Who needs a frontend when you can have a VSCode Extension",
   "version": "0.0.1",
   "engines": {
@@ -10,6 +10,10 @@
   "categories": [
     "Other"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MeerBiene/vsx0"
+  },
   "activationEvents": [
     "onCommand:vsx0.paste"
   ],
