@@ -19,6 +19,13 @@ Visual Studio Code Extension for the **stuff-sharing** service [x0.tf](https://g
 
 <br>
 
+# Roadmap
+#### TODO:
+- Ability to fetch all elements from server
+- Ability to manage elements directly in VSCode
+
+<br>
+
 # Feature Requests & Bug Reports
 
 > For feature requests and bug reports please open a Github Issue. [take me there](https://github.com/MeerBiene/vsx0/issues)
