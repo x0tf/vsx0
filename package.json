@@ -2,8 +2,12 @@
   "name": "vsx0",
   "displayName": "vsx0",
   "publisher": "x0",
+  "author": {
+    "name": "MeerBiene",
+    "email": "60227302+MeerBiene@users.noreply.github.com"
+  },
   "description": "Who needs a frontend when you can have a VSCode Extension",
-  "version": "0.0.420",
+  "version": "0.0.5",
   "engines": {
     "vscode": "^1.53.0"
   },
@@ -12,7 +16,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/MeerBiene/vsx0"
+    "url": "https://github.com/x0tf/vsx0"
   },
   "activationEvents": [
     "onCommand:vsx0.paste"

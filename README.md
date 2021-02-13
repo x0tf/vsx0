@@ -4,7 +4,7 @@ Visual Studio Code Extension for the **stuff-sharing** service [x0.tf](https://g
 
 # Instructions:
 
-0. [Install the Extension](https://marketplace.visualstudio.com/items?itemName=vsmeer.vsx0)
+0. [Install the Extension](https://marketplace.visualstudio.com/items?itemName=x0.vsx0)
 
 1. Select the text you want to create a paste for
 
