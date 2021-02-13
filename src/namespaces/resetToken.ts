@@ -21,6 +21,10 @@ const resetToken = async (context: ExtensionContext): Promise<void> => {
     msg.success(
       `Reset the namespace "${namespace}" for you. Heres the new token: "${res.data.token}"`
     );
+  } else {
+    msg.error(
+      `Something went wrong. Heres the error to show the developer on github: ${res.errormsg?.toString()} ${res.errortrace?.toSting()}`
+    );
   }
 };
 

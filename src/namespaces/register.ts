@@ -22,6 +22,10 @@ const register = async (context: ExtensionContext): Promise<void> => {
     msg.success(
       `Registered and saved "${namespace}" for you. Heres the token: "${res.data.token}" (Save it well!)`
     );
+  } else {
+    msg.error(
+      `Something went wrong. Heres the error to show the developer on github: ${res.errormsg?.toString()} ${res.errortrace?.toSting()}`
+    );
   }
 };
 
