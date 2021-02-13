@@ -4,6 +4,17 @@ All notable changes to the "vsx0" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## 0.0.5
+
+
+
+## 0.0.420
+
+- switched publisher over to x0
+
+## 0.0.4
+- fixed package size (decreased bundle size)
+
 ## 0.0.3
 
 ### Added
