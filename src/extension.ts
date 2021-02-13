@@ -25,6 +25,7 @@ export async function activate(context: vscode.ExtensionContext) {
     async () => {
       // The code you place here will be executed every time your command is executed
 
+      // console.log(vscode.env.clipboard)
       const editor = vscode.window.activeTextEditor;
 
       if (!editor) {

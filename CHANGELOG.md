@@ -4,6 +4,17 @@ All notable changes to the "vsx0" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## 0.0.3
+
+### Added
+
+- toggle wether you want to have the link copied to your clipboard or shown as notification message
+    - default setting: true
+
+## 0.0.2
+
+Hotfix
+
 ## [Unreleased]
 
 ### Added

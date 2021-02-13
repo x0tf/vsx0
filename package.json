@@ -3,7 +3,7 @@
   "displayName": "vsx0",
   "publisher": "vsmeer",
   "description": "Who needs a frontend when you can have a VSCode Extension",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "engines": {
     "vscode": "^1.53.0"
   },
@@ -19,6 +19,17 @@
   ],
   "main": "./dist/extension.js",
   "contributes": {
+    "configuration": {
+      "title": "vsx0",
+      "properties": {
+        "vsx0.copyLinkToClipboard": {
+          "type": "boolean",
+          "description": "Toggle whether you want to see the link for the paste as a notification message or if you want it copied diretly to your clipboard",
+          "default": true
+        }
+      },
+      "default": true
+    },
     "commands": [
       {
         "command": "vsx0.paste",

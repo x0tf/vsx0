@@ -2,6 +2,7 @@ import Returnobject from '../@types/Returnobject';
 import apiUrl from '../util/Constants';
 import http from '../util/http';
 import msg from '../util/msg';
+import { env, workspace } from 'vscode';
 
 const createNewPaste = async (
   namespace: string,
@@ -16,9 +17,15 @@ const createNewPaste = async (
     value: text
   });
   if (!res.error && res.data) {
-    msg.success(
-      `Heres your link: ${apiUrl.baseUrl}${namespace}/${res.data.key}`
-    );
+    const config = await workspace.getConfiguration('vsx0');
+    if (config.copyLinkToClipboard === true) {
+      env.clipboard.writeText(`${apiUrl.baseUrl}${namespace}/${res.data.key}`);
+      msg.success(`Copied the link to your clipboard.`);
+    } else {
+      msg.success(
+        `Heres your link: ${apiUrl.baseUrl}${namespace}/${res.data.key}`
+      );
+    }
   } else {
     msg.warn(`Something went wrong, please try again.`);
   }
