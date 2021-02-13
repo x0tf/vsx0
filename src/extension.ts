@@ -24,14 +24,10 @@ export async function activate(context: vscode.ExtensionContext) {
     'vsx0.paste',
     async () => {
       // The code you place here will be executed every time your command is executed
-
-      // console.log(vscode.env.clipboard)
       const editor = vscode.window.activeTextEditor;
 
-      if (!editor) {
-        msg.error('No Editor open at the moment as it seems');
-        return;
-      }
+      if (!editor) return msg.error('No Editor open at the moment as it seems');
+
       const text = editor.document.getText(editor.selection);
       if (!text) return msg.warn('No text selected');
 
@@ -42,12 +38,11 @@ export async function activate(context: vscode.ExtensionContext) {
           'Register new namespace',
           'Submit already existing namespace and token'
         ]);
-        if (registerOrSubmitExisting) {
-          if (registerOrSubmitExisting.startsWith('Submit')) {
-            await submitNew(context);
-          } else if (registerOrSubmitExisting.startsWith('Register')) {
-            await register(context);
-          }
+        if (!registerOrSubmitExisting) return;
+        if (registerOrSubmitExisting.startsWith('Submit')) {
+          await submitNew(context);
+        } else if (registerOrSubmitExisting.startsWith('Register')) {
+          await register(context);
         }
       } else {
         // get token(s)(if theres more than one show user select input) and send request to x0 api
@@ -61,8 +56,6 @@ export async function activate(context: vscode.ExtensionContext) {
           '> Submit a new namespace and save it in memory.',
           '> Modify an existing namespace (eg. when your token has changed)',
           '> Reset token for existing namespace (if your token ever gets compromised)',
-          // Note: show user the token when deleting namespace, also show message if
-          // ns should also be deleted on server
           '> Delete an existing namespace (Does not delete the namespace from the server!)'
         );
         const selectNameSpace = await vscode.window.showQuickPick(
