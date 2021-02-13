@@ -1,14 +1,13 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
+import deleteNamespace from './namespaces/deleteNamespace';
+import createNewPaste from './elements/createNewPaste';
+import resetToken from './namespaces/resetToken';
+import submitNew from './namespaces/submitNew';
+import register from './namespaces/register';
+import modify from './namespaces/modify';
 import * as vscode from 'vscode';
-import http from './util/http';
-
-const msg = {
-  info: (msg: string) => vscode.window.showInformationMessage(msg),
-  warn: (msg: string) => vscode.window.showWarningMessage(msg),
-  error: (msg: string) => vscode.window.showErrorMessage(msg),
-  success: (msg: string) => vscode.window.showInformationMessage('✅ ' + msg)
-};
+import msg from './util/msg';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -37,63 +36,16 @@ export async function activate(context: vscode.ExtensionContext) {
 
       const tokens = await context.secrets.get('x0_tokens');
       if (!tokens) {
-        msg.error('I was unable to find any saved namespaces and tokens.');
+        msg.warn('I was unable to find any saved namespaces.');
         const registerOrSubmitExisting = await vscode.window.showQuickPick([
           'Register new namespace',
           'Submit already existing namespace and token'
         ]);
         if (registerOrSubmitExisting) {
           if (registerOrSubmitExisting.startsWith('Submit')) {
-            const nameSpace = await vscode.window.showInputBox({
-              prompt: 'Enter your already existing namespace',
-              placeHolder: 'example'
-            });
-            if (nameSpace) {
-              const userToken = await vscode.window.showInputBox({
-                prompt:
-                  'Enter the token now, it will look something like this: ',
-                placeHolder: 'fbaelzugfjwnwara7z4hg89guab4-afrg7euj4e.awf7gzb'
-              });
-              if (userToken) {
-                try {
-                  const tokenObject = {};
-                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                  // @ts-ignore
-                  tokenObject[nameSpace] = userToken;
-                  context.secrets.store(
-                    'x0_tokens',
-                    JSON.stringify(tokenObject)
-                  );
-                  msg.success(`Saved the namespace ${nameSpace}!`);
-                } catch (e) {
-                  msg.error(
-                    'Something went wrong while trying to save your namespace, please try again.'
-                  );
-                }
-              }
-            }
+            await submitNew(context);
           } else if (registerOrSubmitExisting.startsWith('Register')) {
-            const requestedNamespace = await vscode.window.showInputBox({
-              prompt: 'Enter your desired name for the namespace now',
-              placeHolder: '"vsx0"for example'
-            });
-            if (!requestedNamespace)
-              return msg.info('Register process cancelled.');
-            const invite = await vscode.window.showInputBox({
-              prompt:
-                'Enter your invite. This is required to register a namespace.'
-            });
-            if (!invite) return msg.info('Register process cancelled.');
-            const res = await http.register(requestedNamespace, invite);
-            const apiResponse = await JSON.parse(res.data.body.toString());
-            if (apiResponse.messages) {
-              msg.error(
-                `The following error occured: ${apiResponse.messages[0]}`
-              );
-              return;
-            }
-            console.log(res);
-            console.log(res.data.body.toString());
+            await register(context);
           }
         }
       } else {
@@ -105,11 +57,12 @@ export async function activate(context: vscode.ExtensionContext) {
         );
         quickPickOptionsToShow.push(
           '> Register a new namespace (Requires invite)',
+          '> Submit a new namespace and save it in memory.',
           '> Modify an existing namespace (eg. when your token has changed)',
           '> Reset token for existing namespace (if your token ever gets compromised)',
           // Note: show user the token when deleting namespace, also show message if
           // ns should also be deleted on server
-          '> Delete an existing namespace (Be Careful!)'
+          '> Delete an existing namespace (Does not delete the namespace from the server!)'
         );
         const selectNameSpace = await vscode.window.showQuickPick(
           quickPickOptionsToShow,
@@ -120,75 +73,15 @@ export async function activate(context: vscode.ExtensionContext) {
         if (!selectNameSpace) return;
 
         if (selectNameSpace.includes('> Delete an existing namespace')) {
-          //context.secrets.delete('x0_tokens');
-          const nameSpaceToDelete = await vscode.window.showQuickPick(
-            Object.keys(parsedTokens),
-            {
-              placeHolder: 'Pick what namespace to delete from memory'
-            }
-          );
-          if (!nameSpaceToDelete) return;
-          try {
-            const successString = `Deleted the namespace: "${nameSpaceToDelete}". \nHeres the token: "${parsedTokens[nameSpaceToDelete]}"`;
-            delete parsedTokens[nameSpaceToDelete];
-            await context.secrets.delete('x0_tokens');
-            if (Object.keys(parsedTokens).length > 1) {
-              context.secrets.store('x0_tokens', JSON.stringify(parsedTokens));
-            }
-            msg.success(successString);
-          } catch (e) {
-            // TODO: tell user something went wrong
-            console.log(e);
-          }
-          return;
-        } else if (
-          selectNameSpace.includes(
-            '> Reset token for existing namespace (if your token ever gets compromised)'
-          )
-        ) {
-          const selectNameSpaceToReset = await vscode.window.showQuickPick(
-            Object.keys(parsedTokens),
-            {
-              placeHolder:
-                'Pick the namespace that you want to reset the token for.'
-            }
-          );
-          if (!selectNameSpaceToReset) return;
-          const res = await http.resetToken(
-            selectNameSpaceToReset,
-            parsedTokens[selectNameSpaceToReset]
-          );
-          console.log(res);
-          try {
-            const newTokenObject = JSON.parse(res.data.toString());
-            console.log(newTokenObject);
-            if (newTokenObject.token) {
-              msg.info(`Heres your new token: ${newTokenObject.token}`);
-              parsedTokens[selectNameSpaceToReset] = newTokenObject.token;
-              await context.secrets.delete('x0_tokens');
-              context.secrets.store('x0_tokens', JSON.stringify(parsedTokens));
-              // TODO: save new token to secrets store;
-            } else if (newTokenObject.messages) {
-              msg.error(
-                `Something went wrong. Heres the message: ${newTokenObject.messages[0]}`
-              );
-            }
-          } catch (e) {
-            console.log(e);
-          }
-          return;
-        } else if (
-          selectNameSpace.includes(
-            '> Modify an existing namespace (For when your token has changed)'
-          )
-        ) {
-          return;
-        } else if (
-          selectNameSpace.includes(
-            '> Register a new namespace (Requires invite)'
-          )
-        ) {
-          return;
+          return await deleteNamespace(context);
+        } else if (selectNameSpace.includes('> Reset token')) {
+          return await resetToken(context);
+        } else if (selectNameSpace.includes('> Modify an')) {
+          return await modify(context);
+        } else if (selectNameSpace.includes('> Register')) {
+          return await register(context);
+        } else if (selectNameSpace.startsWith('> Submit a')) {
+          return await submitNew(context);
         }
 
         const customKey = await vscode.window.showInputBox({
@@ -196,23 +89,13 @@ export async function activate(context: vscode.ExtensionContext) {
             'Do you want to use a custom key for this paste? If so enter it now. If not just cancel this input',
           placeHolder: '"github" or "readme"for example.'
         });
-        const res = await http.paste(
+
+        await createNewPaste(
           selectNameSpace,
           parsedTokens[selectNameSpace],
           text,
           customKey
         );
-
-        const apiResponse = await JSON.parse(res.data.body.toString());
-        if (apiResponse.messages) {
-          msg.error(`The following error occured: ${apiResponse.messages[0]}`);
-          return;
-        }
-        if (apiResponse.namespace && apiResponse.key) {
-          const pasteUrl =
-            'https://x0.tf/' + apiResponse.namespace + '/' + apiResponse.key;
-          msg.info(`Heres your link: ${pasteUrl}`);
-        }
       }
     }
   );
