@@ -7,7 +7,7 @@
     "email": "60227302+MeerBiene@users.noreply.github.com"
   },
   "description": "Who needs a frontend when you can have a VSCode Extension",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "engines": {
     "vscode": "^1.53.0"
   },

@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.8](https://github.com/x0tf/vsx0/compare/v0.0.7...v0.0.8) (2021-02-13)
+
+
+### Bug Fixes
+
+* **error-handling:** return errors to user ([349d674](https://github.com/x0tf/vsx0/commit/349d674554473f2eb12bbe327bccc4101a4b0e48))
+* **invites:** remove need for invites ([64c0853](https://github.com/x0tf/vsx0/commit/64c08537ac6bfd0dd030cd6eda2c7f52668e1b66))
+
 ### [0.0.7](https://github.com/x0tf/vsx0/compare/v0.0.6...v0.0.7) (2021-02-13)
 
 
